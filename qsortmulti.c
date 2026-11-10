@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdbool.h>
 
 #define KILO (1024)
 #define MEGA (1024 * 1024)
@@ -193,7 +194,7 @@ quick_sort(int *v, unsigned low, unsigned high)
     part1.low = low;
     part1.high = high;
     part1.current_threads = 1;
-    part1.max_threads = 32;
+    part1.max_threads = 8192;
     _quick_sort(&part1);
 }
 
