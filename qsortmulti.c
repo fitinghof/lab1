@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <time.h>
 #include <stdbool.h>
 
 #define KILO (1024)
@@ -202,6 +203,17 @@ int main(int argc, char **argv)
 {
     init_array();
     // print_array();
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
     quick_sort(v, 0, MAX_ITEMS - 1);
+
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double elapsed =
+        (end.tv_sec - start.tv_sec) +
+        (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    printf("Execution time: %f seconds\n", elapsed);
+
     // printf("%s\n", assert_sorted() ? "Sort was successfull" : "Failed to sort");
 }

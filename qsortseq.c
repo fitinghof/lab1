@@ -6,11 +6,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define KILO (1024)
-#define MEGA (1024*1024)
-#define MAX_ITEMS (64*MEGA)
-#define swap(v, a, b) {unsigned tmp; tmp=v[a]; v[a]=v[b]; v[b]=tmp;}
+#define MEGA (1024 * 1024)
+#define MAX_ITEMS (64 * MEGA)
+#define swap(v, a, b) \
+    {                 \
+        unsigned tmp; \
+        tmp = v[a];   \
+        v[a] = v[b];  \
+        v[b] = tmp;   \
+    }
 
 static int *v;
 
@@ -27,7 +34,7 @@ static void
 init_array(void)
 {
     int i;
-    v = (int *) malloc(MAX_ITEMS*sizeof(int));
+    v = (int *)malloc(MAX_ITEMS * sizeof(int));
     for (i = 0; i < MAX_ITEMS; i++)
         v[i] = rand();
 }
@@ -48,7 +55,8 @@ partition(int *v, unsigned low, unsigned high, unsigned pivot_index)
      */
 
     /* move elements into place */
-    while (low <= high) {
+    while (low <= high)
+    {
         if (v[low] <= v[pivot_index])
             low++;
         else if (v[high] > v[pivot_index])
@@ -73,23 +81,33 @@ quick_sort(int *v, unsigned low, unsigned high)
         return;
 
     /* select the pivot value */
-    pivot_index = (low+high)/2;
+    pivot_index = (low + high) / 2;
 
     /* partition the vector */
     pivot_index = partition(v, low, high, pivot_index);
 
     /* sort the two sub arrays */
     if (low < pivot_index)
-        quick_sort(v, low, pivot_index-1);
+        quick_sort(v, low, pivot_index - 1);
     if (pivot_index < high)
-        quick_sort(v, pivot_index+1, high);
+        quick_sort(v, pivot_index + 1, high);
 }
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     init_array();
-    //print_array();
-    quick_sort(v, 0, MAX_ITEMS-1);
-    //print_array();
+    // print_array();
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+
+    quick_sort(v, 0, MAX_ITEMS - 1);
+
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double elapsed =
+        (end.tv_sec - start.tv_sec) +
+        (end.tv_nsec - start.tv_nsec) / 1e9;
+
+    printf("Execution time: %f seconds\n", elapsed);
+    // print_array();
 }
